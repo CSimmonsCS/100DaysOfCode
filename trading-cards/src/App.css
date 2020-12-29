@@ -1,0 +1,52 @@
+header{
+  height: 75px;
+  background-color: #008080;
+}
+
+nav{
+  position: fixed;
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  width: 100%;
+  height: inherit;
+  align-items: center;
+}
+
+nav > .logo {
+  display: flex;
+  width: 100px;
+  align-self: center;
+  justify-content: flex-start;
+  margin-left: 15px;
+}
+
+.logo > a{
+  text-decoration: none;
+  color: white;
+}
+
+nav > ul {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  margin: 0 15px 0 0;
+}
+
+nav > ul > li {
+  list-style-type: none;
+}
+
+nav > ul > li > a {
+  text-decoration: none;
+  color: white;
+  padding: 30px 17px;
+  transition: background 0.4s, text-shadow 0.4s;
+}
+
+nav > ul > li > a:hover {
+  background: rgba(255,255,255, 0.66);
+  text-shadow: 0 1px 5px rgba(0,0,0,0.15);
+  text-decoration: none;
+  color: gray;
+}
