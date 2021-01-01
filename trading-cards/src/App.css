@@ -1,3 +1,20 @@
+/* MATERIAL UI CSS CHANGES */
+div.layout-container{
+  margin: 0;
+  text-align: center;
+  width: auto;
+}
+
+.test-height{
+  height: 100px;
+}
+
+.filter-column > div{
+  padding: 0;
+}
+
+/* END MATERIAL UI */
+
 header{
   height: 75px;
   background-color: #008080;

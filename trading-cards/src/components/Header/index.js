@@ -13,16 +13,10 @@ function Header() {
           </div>
           <ul>
             <li>
-              <a href="#">Basketball</a>
-            </li>
-            <li>
-              <a href="#">Football</a>
-            </li>
-            <li>
-              <a href="#">Baseball</a>
-            </li>
-            <li>
               <a href="#">Pokemon</a>
+            </li>
+            <li>
+              <a href="#">YuGiOh</a>
             </li>
             <li>
               <a href="#">Sign In</a>
