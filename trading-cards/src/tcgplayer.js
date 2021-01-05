@@ -57,7 +57,7 @@ export let getAllCategories = async () => {
     console.log(error.response);
   });
 
-
+  // console.log(response.data);
   console.log('all categories call success');
   //all categories
   const all_categories = response.data;
@@ -100,24 +100,23 @@ export let getPokemonProducts = async (pokemonId) => {
   const response = await axios({
     url: 'https://api.tcgplayer.com/catalog/categories/' + pokemonId + '/search',
     method: 'POST',
-    headers: headers,
-    data: {
-      sort: "string",
-      limit: 24,
-      offset: 0,
-      filters: [
-        {
-          name: 'Category',
-          values: [
-            'Pokemon',
-          ]
-        }
-      ]
-    }
+    headers:
+    {
+      "Authorization": headers['Authorization'],
+      "Accept": "application/json",
+      "Content-Type": "text/json"
+    },
+    // body: {
+    //   sort: "",
+    //   limit: 0,
+    //   offset: 0,
+    //   filters: [{name: 'ProductName', values: ['Pokemon',]}],
+    // },
+    data: "{\"filters\":[{\"values\":[\"Charizard\"],\"name\":\"ProductName\"}],\"limit\":24,\"includeAggregates\":true,\"offset\":0,\"sort\":\"MinPrice DESC\"}",
   }).catch((error) => {
     console.log(error.response);
   });
-
+  console.log(response);
   const all_pokemon_products = response.data;
 
   console.log(all_pokemon_products);

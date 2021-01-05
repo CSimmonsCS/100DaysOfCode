@@ -23,7 +23,6 @@ class SearchLayout extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      'bearer': ''
     };
   }
 
@@ -34,6 +33,7 @@ class SearchLayout extends React.Component {
     let all_pokemon_products = await getPokemonProducts(pokemonCategoryId);
     let all_product_details = await getAllProductsById(all_pokemon_products);
 
+    this.setState({'products': all_product_details});
   }
 
   render() {
@@ -42,47 +42,23 @@ class SearchLayout extends React.Component {
         <Grid container spacing={3} className="layout-container">
           <Grid container xs={3} className="filter-column">Column</Grid>
           <Grid container spacing={3} xs={9} className="layout-container">
-            <Grid item xs={3}>
-              <Paper variant="outlined" elevation={3}>
-                <div className="test-height">Test</div>
-              </Paper>
-            </Grid>
-            <Grid item xs={3}>
-              <Paper variant="outlined" elevation={3}>
-                <div className="test-height">Test</div>
-              </Paper>
-            </Grid>
-            <Grid item xs={3}>
-              <Paper variant="outlined" elevation={3}>
-                <div className="test-height">Test</div>
-              </Paper>
-            </Grid>
-            <Grid item xs={3}>
-              <Paper variant="outlined" elevation={3}>
-                <div className="test-height">Test</div>
-              </Paper>
-            </Grid>
+            {!this.state.products || this.state.products.length <= 0 ? (
+            <tr>
+              <td>No Products</td>
+            </tr>
+            ):(
+              this.state.products.map(product => (
+                <Grid item xs={3} key={product.productId}>
+                  <Paper variant="outlined" elevation={3}>
+                    <div className="test-height">
+                      <img className="search-img" src={product[0].imageUrl} alt="img" />
+                      <div>{product[0].name}</div>
+                    </div>
+                  </Paper>
+                </Grid>
+              ))
+            )}
 
-            <Grid item xs={3}>
-              <Paper variant="outlined" elevation={3}>
-                <div className="test-height">Test</div>
-              </Paper>
-            </Grid>
-            <Grid item xs={3}>
-              <Paper variant="outlined" elevation={3}>
-                <div className="test-height">Test</div>
-              </Paper>
-            </Grid>
-            <Grid item xs={3}>
-              <Paper variant="outlined" elevation={3}>
-                <div className="test-height">Test</div>
-              </Paper>
-            </Grid>
-            <Grid item xs={3}>
-              <Paper variant="outlined" elevation={6}>
-                <div className="test-height">Test</div>
-              </Paper>
-            </Grid>
           </Grid>
         </Grid>
       </div>

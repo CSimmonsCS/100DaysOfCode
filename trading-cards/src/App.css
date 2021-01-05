@@ -67,3 +67,8 @@ nav > ul > li > a:hover {
   text-decoration: none;
   color: gray;
 }
+
+.search-img{
+  height: 90%;
+  max-width: 100%;
+}
