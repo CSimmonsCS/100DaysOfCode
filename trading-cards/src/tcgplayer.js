@@ -8,7 +8,7 @@ const PROXY_URL = 'https://cors-anywhere.herokuapp.com/';
 let headers = {
   // 'User-Agent': 'CardValue',
   'Content-Type': 'application/x-www-form-urlencoded',
-  // 'Access-Control-Allow-Origin': 'http://127.0.0.1:3000/',
+  'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Credentials': 'true',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
   'Access-Control-Allow-Methods': 'POST'
@@ -112,7 +112,7 @@ export let getPokemonProducts = async (pokemonId) => {
     //   offset: 0,
     //   filters: [{name: 'ProductName', values: ['Pokemon',]}],
     // },
-    data: "{\"filters\":[{\"values\":[\"Charizard\"],\"name\":\"ProductName\"}],\"limit\":24,\"includeAggregates\":true,\"offset\":0,\"sort\":\"MinPrice DESC\"}",
+    data: "{\"filters\":[{\"values\":[\"Charizard\"],\"name\":\"ProductName\"}],\"limit\":144,\"includeAggregates\":true,\"offset\":0,\"sort\":\"MinPrice DESC\"}",
   }).catch((error) => {
     console.log(error.response);
   });
@@ -128,7 +128,7 @@ export let getPokemonProducts = async (pokemonId) => {
 export let getAllProductsById = async (arrayOfProductIds) => {
   let all_product_details = [];
 
-  console.log('calling to api to get Product Details (24)');
+  console.log('calling to api to get Product Details (144)');
   for(var i = 0; i < arrayOfProductIds.length; i++){
     all_product_details.push(await getOneProductById(arrayOfProductIds[i]));
   }

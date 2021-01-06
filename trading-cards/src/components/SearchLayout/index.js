@@ -19,11 +19,35 @@ import { getBearerToken, getAllCategories,
 //   '&client_id=' + PUBLIC_KEY +
 //   '&client_secret=' + PRIVATE_KEY;
 
+const Products = props => {
+  if(props.products.length === 0){
+    return 'Loading...'
+  }
+  return props.products
+    .slide(0, props.numItemsShown)
+    .map(product => (
+      <Grid item xs={3} key={product.productId}>
+        <Paper variant="outlined" elevation={3}>
+          <div className="test-height">
+            <img className="search-img" src={product[0].imageUrl} alt="img" />
+            <div>{product[0].name}</div>
+          </div>
+        </Paper>
+      </Grid>
+    ))
+}
+
 class SearchLayout extends React.Component {
   constructor(props){
     super(props);
     this.state = {
+      numProductsToShow: 12,
     };
+  }
+
+  showMoreProducts = () => {
+    let new_total_products_shown = this.state.numProductsToShow+12;
+    this.setState({'numProductsToShow': new_total_products_shown});
   }
 
   async componentDidMount(){
@@ -44,10 +68,12 @@ class SearchLayout extends React.Component {
           <Grid container spacing={3} xs={9} className="layout-container">
             {!this.state.products || this.state.products.length <= 0 ? (
             <tr>
-              <td>No Products</td>
+              <td>Loading...</td>
             </tr>
             ):(
-              this.state.products.map(product => (
+              this.state.products
+              .slice(0, this.state.numProductsToShow)
+              .map(product => (
                 <Grid item xs={3} key={product.productId}>
                   <Paper variant="outlined" elevation={3}>
                     <div className="test-height">
@@ -57,8 +83,10 @@ class SearchLayout extends React.Component {
                   </Paper>
                 </Grid>
               ))
+
             )}
 
+            <a onClick={this.showMoreProducts} href="#">Show More</a>
           </Grid>
         </Grid>
       </div>

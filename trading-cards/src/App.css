@@ -6,7 +6,7 @@ div.layout-container{
 }
 
 .test-height{
-  height: 100px;
+  /* height: 100px; */
 }
 
 .filter-column > div{
@@ -18,10 +18,11 @@ div.layout-container{
 header{
   height: 75px;
   background-color: #008080;
+  position: fixed;
+  width: 100%;
 }
 
 nav{
-  position: fixed;
   display: flex;
   justify-content: space-between;
   color: white;
@@ -69,6 +70,6 @@ nav > ul > li > a:hover {
 }
 
 .search-img{
-  height: 90%;
-  max-width: 100%;
+  /* height: 90%; */
+  max-width: 90%;
 }
