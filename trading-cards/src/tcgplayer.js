@@ -95,7 +95,7 @@ export let getPokemonMedia = async (pokemonId) => {
   return all_pokemon_media;
 }
 
-export let getPokemonProducts = async (pokemonId) => {
+export let getPokemonProducts = async (pokemonId, search_term) => {
   console.log('calling to api to get pokemon products');
   const response = await axios({
     url: 'https://api.tcgplayer.com/catalog/categories/' + pokemonId + '/search',
@@ -112,7 +112,7 @@ export let getPokemonProducts = async (pokemonId) => {
     //   offset: 0,
     //   filters: [{name: 'ProductName', values: ['Pokemon',]}],
     // },
-    data: "{\"filters\":[{\"values\":[\"Charizard\"],\"name\":\"ProductName\"}],\"limit\":144,\"includeAggregates\":true,\"offset\":0,\"sort\":\"MinPrice DESC\"}",
+    data: "{\"filters\":[{\"values\":[\"" + search_term + "\"],\"name\":\"ProductName\"}],\"limit\":72,\"includeAggregates\":true,\"offset\":0,\"sort\":\"MinPrice DESC\"}",
   }).catch((error) => {
     console.log(error.response);
   });
@@ -128,7 +128,7 @@ export let getPokemonProducts = async (pokemonId) => {
 export let getAllProductsById = async (arrayOfProductIds) => {
   let all_product_details = [];
 
-  console.log('calling to api to get Product Details (144)');
+  console.log('calling to api to get Product Details (72)');
   for(var i = 0; i < arrayOfProductIds.length; i++){
     all_product_details.push(await getOneProductById(arrayOfProductIds[i]));
   }

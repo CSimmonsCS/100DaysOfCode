@@ -6,6 +6,8 @@ import { getBearerToken, getAllCategories,
         getPokemonCategoryId, getPokemonProducts,
         getAllProductsById, } from "../../tcgplayer.js";
 
+import Search from '../Search';
+
 // const PUBLIC_KEY = 'e461db10-9b1d-48f4-b689-e6bd4e1be9dd';
 // const PRIVATE_KEY = 'edfa43ea-dff7-4788-8a2b-285afa3e172f';
 //
@@ -42,7 +44,18 @@ class SearchLayout extends React.Component {
     super(props);
     this.state = {
       numProductsToShow: 12,
+      search_term: '',
     };
+  }
+
+  async componentDidMount(){
+    await getBearerToken();
+    const categories = await getAllCategories();
+    let pokemonCategoryId = await getPokemonCategoryId(categories);
+    let all_pokemon_products = await getPokemonProducts(pokemonCategoryId, this.state.search_term);
+    let all_product_details = await getAllProductsById(all_pokemon_products);
+
+    this.setState({'products': all_product_details});
   }
 
   showMoreProducts = () => {
@@ -50,11 +63,17 @@ class SearchLayout extends React.Component {
     this.setState({'numProductsToShow': new_total_products_shown});
   }
 
-  async componentDidMount(){
+  onChange = e => {
+    this.setState({ [e.target.name]: e.target.value});
+  }
+
+  handleSearch = async e => {
+    e.preventDefault();
+
     await getBearerToken();
     const categories = await getAllCategories();
     let pokemonCategoryId = await getPokemonCategoryId(categories);
-    let all_pokemon_products = await getPokemonProducts(pokemonCategoryId);
+    let all_pokemon_products = await getPokemonProducts(pokemonCategoryId, this.state.search_term);
     let all_product_details = await getAllProductsById(all_pokemon_products);
 
     this.setState({'products': all_product_details});
@@ -64,7 +83,9 @@ class SearchLayout extends React.Component {
     return (
       <div className='SearchLayout'>
         <Grid container spacing={3} className="layout-container">
-          <Grid container xs={3} className="filter-column">Column</Grid>
+          <Grid container xs={3} className="filter-column">
+            <Search searchTerm={this.state.search_term} onChange={this.onChange} handleSearch={this.handleSearch} />
+          </Grid>
           <Grid container spacing={3} xs={9} className="layout-container">
             {!this.state.products || this.state.products.length <= 0 ? (
             <tr>
@@ -86,7 +107,7 @@ class SearchLayout extends React.Component {
 
             )}
 
-            <a onClick={this.showMoreProducts} href="#">Show More</a>
+            <div onClick={this.showMoreProducts} >Show More</div>
           </Grid>
         </Grid>
       </div>

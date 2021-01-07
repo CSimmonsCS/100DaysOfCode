@@ -20,6 +20,7 @@ header{
   background-color: #008080;
   position: fixed;
   width: 100%;
+  z-index: 1;
 }
 
 nav{
@@ -67,6 +68,19 @@ nav > ul > li > a:hover {
   text-shadow: 0 1px 5px rgba(0,0,0,0.15);
   text-decoration: none;
   color: gray;
+}
+
+.SearchLayout{
+  padding-top: 75px;
+}
+
+.Search{
+  display: flex;
+}
+
+.Search > button {
+  height: 50px;
+  width: 100px;
 }
 
 .search-img{
