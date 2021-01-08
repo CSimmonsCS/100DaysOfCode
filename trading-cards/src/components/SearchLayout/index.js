@@ -22,17 +22,19 @@ import Search from '../Search';
 //   '&client_secret=' + PRIVATE_KEY;
 
 const Products = props => {
-  if(props.products.length === 0){
+  if(!props.products || props.products.length === 0){
     return 'Loading...'
   }
   return props.products
-    .slide(0, props.numItemsShown)
+    .slice(0, props.numItemsShown)
     .map(product => (
-      <Grid item xs={3} key={product.productId}>
+      <Grid item xs={3} key={product[0].productId}>
         <Paper variant="outlined" elevation={3}>
           <div className="test-height">
-            <img className="search-img" src={product[0].imageUrl} alt="img" />
-            <div>{product[0].name}</div>
+            <a href={product[0].url} target="_blank" rel="noreferrer">
+              <img className="search-img" src={product[0].imageUrl} alt="img" />
+            </a>
+          <div>{product[0].name}</div>
           </div>
         </Paper>
       </Grid>
@@ -87,25 +89,7 @@ class SearchLayout extends React.Component {
             <Search searchTerm={this.state.search_term} onChange={this.onChange} handleSearch={this.handleSearch} />
           </Grid>
           <Grid container spacing={3} xs={9} className="layout-container">
-            {!this.state.products || this.state.products.length <= 0 ? (
-            <tr>
-              <td>Loading...</td>
-            </tr>
-            ):(
-              this.state.products
-              .slice(0, this.state.numProductsToShow)
-              .map(product => (
-                <Grid item xs={3} key={product.productId}>
-                  <Paper variant="outlined" elevation={3}>
-                    <div className="test-height">
-                      <img className="search-img" src={product[0].imageUrl} alt="img" />
-                      <div>{product[0].name}</div>
-                    </div>
-                  </Paper>
-                </Grid>
-              ))
-
-            )}
+            <Products products={this.state.products} numItemsShown={this.state.numItemsShown}/>
 
             <div onClick={this.showMoreProducts} >Show More</div>
           </Grid>

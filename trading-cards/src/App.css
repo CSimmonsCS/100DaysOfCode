@@ -85,5 +85,7 @@ nav > ul > li > a:hover {
 
 .search-img{
   /* height: 90%; */
+  min-height: 200px;
+  max-height: 200px;
   max-width: 90%;
 }

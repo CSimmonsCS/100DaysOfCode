@@ -149,6 +149,8 @@ export let getOneProductById = async (productId) => {
     console.log(error.response);
   });
 
+  const product_market_prices = await getProductBuylistPrices(productId);
+
   const product_details = response.data.results;
   // console.log(response.data.results);
   console.log(productId + ' success');
@@ -156,6 +158,21 @@ export let getOneProductById = async (productId) => {
   return product_details;
 
 }
+
+let getProductBuylistPrices = async (productId) => {
+  console.log('calling to api to get ' + productId + ' market price');
+
+  const response = await axios({
+    url: 'https://api.tcgplayer.com/pricing/buy/product/' + productId,
+    method: 'GET',
+    headers: headers,
+  }).catch((error) => {
+    console.log(error.response);
+  });
+
+  console.log(response);
+}
+
 
 let printThis = async (print) => {
   console.log(print);
