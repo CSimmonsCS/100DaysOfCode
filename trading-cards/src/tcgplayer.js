@@ -149,28 +149,42 @@ export let getOneProductById = async (productId) => {
     console.log(error.response);
   });
 
-  const product_market_prices = await getProductBuylistPrices(productId);
+  const relevant_product_market_prices = await getProductMarketPrices(productId);
 
-  const product_details = response.data.results;
+  let product_details = response.data.results;
+  product_details['relevant_product_market_prices'] = relevant_product_market_prices;
   // console.log(response.data.results);
   console.log(productId + ' success');
+  console.log(product_details);
 
   return product_details;
 
 }
 
-let getProductBuylistPrices = async (productId) => {
+let getProductMarketPrices = async (productId) => {
   console.log('calling to api to get ' + productId + ' market price');
 
   const response = await axios({
-    url: 'https://api.tcgplayer.com/pricing/buy/product/' + productId,
+    url: 'https://api.tcgplayer.com/pricing/product/' + productId,
     method: 'GET',
     headers: headers,
   }).catch((error) => {
     console.log(error.response);
   });
 
-  console.log(response);
+  let all_prints_market_prices = response.data.results;
+
+  // console.log(all_prints_market_prices);
+
+  let filtered_market_prices = all_prints_market_prices.find( printing => printing.marketPrice);
+
+  if(!filtered_market_prices){
+    filtered_market_prices = all_prints_market_prices.find( printing => printing.midPrice);
+  }
+
+  console.log(filtered_market_prices);
+
+  return filtered_market_prices;
 }
 
 
