@@ -131,8 +131,15 @@ nav > ul > li > a:hover {
 }
 
 .product-paper{
-  background-color: #5d5d5d;
-  color:white;
+  /* background-color: #5d5d5d;
+  color:white; */
+  box-shadow: rgba(0, 0, 0, 0.06) 0px 2px 4px;
+}
+
+.product-paper:hover {
+  box-shadow: rgba(0, 0, 0, 0.22) 0px 5px 10px;
+  transform: translate3d(-3px, -3px, 0px);
+  transition: all 0.1s ease-in-out;
 }
 
 .product-name{
@@ -146,4 +153,14 @@ nav > ul > li > a:hover {
 .product-foil-type{
   font-style: italic;
   margin-bottom: 10px;
+}
+
+/* uses a 'react-loadingg' library */
+.loading-graphic{
+  /* position: relative; */
+  width: 100%;
+}
+
+.loading-graphic > div {
+  position: relative !important;
 }

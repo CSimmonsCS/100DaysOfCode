@@ -8,7 +8,7 @@ function Header() {
         <nav>
           <div className="logo">
             <a href="/">
-              <h2>CardStock</h2>
+              <h2>CardValue</h2>
             </a>
           </div>
           <ul>

@@ -8,6 +8,10 @@ import { getBearerToken, getAllCategories,
 
 import Search from '../Search';
 
+//loading graphic
+import { BlockReserveLoading } from 'react-loadingg';
+
+
 // const PUBLIC_KEY = 'e461db10-9b1d-48f4-b689-e6bd4e1be9dd';
 // const PRIVATE_KEY = 'edfa43ea-dff7-4788-8a2b-285afa3e172f';
 //
@@ -23,7 +27,12 @@ import Search from '../Search';
 
 const Products = props => {
   if(!props.products || props.products.length === 0){
-    return 'Loading...'
+    //loading graphic in 'CardValue' purple
+    return (
+      <div className="loading-graphic">
+        <BlockReserveLoading color={'#332940'} />
+      </div>
+    )
   }
   return props.products
     .slice(0, props.numProductsToShow)
@@ -32,7 +41,7 @@ const Products = props => {
         <Paper variant="outlined" elevation={3} className="product-paper">
           <div className="test-height">
             <a href={product[0].url} target="_blank" rel="noreferrer">
-              <img className="search-img" src={product[0].imageUrl} alt="img" />
+              <img alt={product[0].name} className="search-img" src={product[0].imageUrl} />
             </a>
           <div className="product-name">{product[0].name}</div>
           </div>
@@ -85,6 +94,8 @@ class SearchLayout extends React.Component {
 
   handleSearch = async e => {
     e.preventDefault();
+
+    this.setState({'products': null });
 
     await getBearerToken();
     const categories = await getAllCategories();
