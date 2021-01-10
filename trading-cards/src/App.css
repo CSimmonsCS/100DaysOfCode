@@ -7,6 +7,8 @@ div.layout-container{
 
 .test-height{
   /* height: 100px; */
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .filter-column > div{
@@ -15,9 +17,13 @@ div.layout-container{
 
 /* END MATERIAL UI */
 
+body{
+  /* background-color: #121212; */
+}
+
 header{
   height: 75px;
-  background-color: #008080;
+  background-color: #332940;
   position: fixed;
   width: 100%;
   z-index: 1;
@@ -76,6 +82,13 @@ nav > ul > li > a:hover {
 
 .Search{
   display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  /* margin: auto; */
+  /* background-color: #212121; */
+  position: fixed;
+  height: 100%;
+  width: 25%;
 }
 
 .Search > button {
@@ -83,9 +96,54 @@ nav > ul > li > a:hover {
   width: 100px;
 }
 
+.search-text-field, .search-submit-button{
+  margin: 10px auto !important;
+}
+
 .search-img{
   /* height: 90%; */
   /* min-height: 200px; */
   max-height: 200px;
   max-width: 90%;
+}
+
+.show-more-button-container{
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  border-radius: 50px;
+  margin-bottom: 10px;
+  background-color: #332940;
+  color: white;
+  font-weight: bold;
+  height: 50px;
+  width: 150px;
+}
+
+.show-more-button-container:hover{
+  background-color: #5D5D5D;
+  cursor: pointer;
+  transition: 0.5s;
+}
+
+.show-more-button{
+  align-self: center;
+}
+
+.product-paper{
+  background-color: #5d5d5d;
+  color:white;
+}
+
+.product-name{
+  font-weight: bold;
+}
+
+.product-price{
+  color: green;
+}
+
+.product-foil-type{
+  font-style: italic;
+  margin-bottom: 10px;
 }

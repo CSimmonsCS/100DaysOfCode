@@ -178,11 +178,13 @@ let getProductMarketPrices = async (productId) => {
 
   let filtered_market_prices = all_prints_market_prices.find( printing => printing.marketPrice);
 
+  //if we cannot find marketPrice property, check for midPrice
+  //if there is no midPrice property, return {}
   if(!filtered_market_prices){
     filtered_market_prices = all_prints_market_prices.find( printing => printing.midPrice);
   }
 
-  console.log(filtered_market_prices);
+  // console.log(filtered_market_prices);
 
   return filtered_market_prices;
 }

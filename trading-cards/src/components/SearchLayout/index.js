@@ -29,20 +29,27 @@ const Products = props => {
     .slice(0, props.numProductsToShow)
     .map(product => (
       <Grid item xs={3} key={product[0].productId}>
-        <Paper variant="outlined" elevation={3}>
+        <Paper variant="outlined" elevation={3} className="product-paper">
           <div className="test-height">
             <a href={product[0].url} target="_blank" rel="noreferrer">
               <img className="search-img" src={product[0].imageUrl} alt="img" />
             </a>
-          <div>{product[0].name}</div>
+          <div className="product-name">{product[0].name}</div>
           </div>
-          <div>
-            {product.relevant_product_market_prices.marketPrice ? 'Market Price: ' + product.relevant_product_market_prices.marketPrice :
-              (product.relevant_product_market_prices.midPrice ? 'Median Price: ' + product.relevant_product_market_prices.midPrice : 'None')}
-          </div>
-          <div>
-            Foil Type: {product.relevant_product_market_prices.subTypeName}
-          </div>
+
+          {product.relevant_product_market_prices ?
+            <div>
+              <div className="product-price">
+                {product.relevant_product_market_prices.marketPrice!==null ? 'Market Price: $' + product.relevant_product_market_prices.marketPrice.toFixed(2) :
+                  (product.relevant_product_market_prices.midPrice!==null ? 'Median Price: $' + product.relevant_product_market_prices.midPrice.toFixed(2) : 'None')}
+              </div>
+              <div className="product-foil-type">
+                Foil Type: {product.relevant_product_market_prices.subTypeName}
+              </div>
+            </div>
+            :
+            ''
+          }
         </Paper>
       </Grid>
     ))
@@ -98,7 +105,16 @@ class SearchLayout extends React.Component {
           <Grid container spacing={3} xs={9} className="layout-container">
             <Products products={this.state.products} numProductsToShow={this.state.numProductsToShow}/>
 
-            <div onClick={this.showMoreProducts} >Show More</div>
+            {this.state.products ?
+              <div className="show-more-button-container" onClick={this.showMoreProducts} >
+                <div className="show-more-button">
+                  Show More
+                </div>
+              </div>
+              :
+              ''
+            }
+
           </Grid>
         </Grid>
       </div>
