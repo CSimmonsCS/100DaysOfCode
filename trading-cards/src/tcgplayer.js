@@ -77,6 +77,8 @@ export let getPokemonCategoryId = (all_categories) => {
   return pokemonCategoryId;
 }
 
+//unused, function gets media files like jpeg, etc
+//unwanted for scope of project
 export let getPokemonMedia = async (pokemonId) => {
   console.log('calling to api to get all pokemon category media')
   const response = await axios({

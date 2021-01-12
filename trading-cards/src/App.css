@@ -164,3 +164,26 @@ nav > ul > li > a:hover {
 .loading-graphic > div {
   position: relative !important;
 }
+
+.SearchChecklist{
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  margin: 10px auto;
+  border: 1px solid rgba(0, 0, 0, 0.22);
+}
+
+.SearchChecklist > h2{
+  text-align: left;
+  padding: 1rem 2rem 16px;
+  margin: 0;
+}
+
+.search-printing, .search-price{
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  /* margin: auto; */
+  padding: 1rem 2rem 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.22);
+}

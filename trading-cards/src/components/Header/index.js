@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Card from './Card.png';
+
 
 function Header() {
   return(
@@ -8,7 +10,7 @@ function Header() {
         <nav>
           <div className="logo">
             <a href="/">
-              <h2>CardValue</h2>
+              <img src={Card} alt="logo"/>
             </a>
           </div>
           <ul>

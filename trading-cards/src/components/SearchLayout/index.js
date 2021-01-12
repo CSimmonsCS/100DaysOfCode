@@ -111,7 +111,11 @@ class SearchLayout extends React.Component {
       <div className='SearchLayout'>
         <Grid container spacing={3} className="layout-container">
           <Grid container xs={3} className="filter-column">
-            <Search searchTerm={this.state.search_term} onChange={this.onChange} handleSearch={this.handleSearch} />
+            <Search
+              searchTerm={this.state.search_term}
+              onChange={this.onChange}
+              handleSearch={this.handleSearch}
+            />
           </Grid>
           <Grid container spacing={3} xs={9} className="layout-container">
             <Products products={this.state.products} numProductsToShow={this.state.numProductsToShow}/>
