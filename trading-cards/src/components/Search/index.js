@@ -11,7 +11,7 @@ var Search = (props) => {
       <TextField className="search-text-field" name="search_term" id="search" value={props.searchTerm} onChange={props.onChange} label="Search" />
       <button className="search-submit-button" type="submit" onClick={props.handleSearch} >Search</button>
 
-      <SearchChecklist />
+      <SearchChecklist checkedBoxes={props.checkedBoxes} handleCheckboxPrinting={props.handleCheckboxPrinting}/>
     </div>
   )
 }

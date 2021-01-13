@@ -7,9 +7,8 @@ import { getBearerToken, getAllCategories,
         getAllProductsById, } from "../../tcgplayer.js";
 
 import Search from '../Search';
+import Products from '../Products';
 
-//loading graphic
-import { BlockReserveLoading } from 'react-loadingg';
 
 
 // const PUBLIC_KEY = 'e461db10-9b1d-48f4-b689-e6bd4e1be9dd';
@@ -25,44 +24,7 @@ import { BlockReserveLoading } from 'react-loadingg';
 //   '&client_id=' + PUBLIC_KEY +
 //   '&client_secret=' + PRIVATE_KEY;
 
-const Products = props => {
-  if(!props.products || props.products.length === 0){
-    //loading graphic in 'CardValue' purple
-    return (
-      <div className="loading-graphic">
-        <BlockReserveLoading color={'#332940'} />
-      </div>
-    )
-  }
-  return props.products
-    .slice(0, props.numProductsToShow)
-    .map(product => (
-      <Grid item xs={3} key={product[0].productId}>
-        <Paper variant="outlined" elevation={3} className="product-paper">
-          <div className="test-height">
-            <a href={product[0].url} target="_blank" rel="noreferrer">
-              <img alt={product[0].name} className="search-img" src={product[0].imageUrl} />
-            </a>
-          <div className="product-name">{product[0].name}</div>
-          </div>
 
-          {product.relevant_product_market_prices ?
-            <div>
-              <div className="product-price">
-                {product.relevant_product_market_prices.marketPrice!==null ? 'Market Price: $' + product.relevant_product_market_prices.marketPrice.toFixed(2) :
-                  (product.relevant_product_market_prices.midPrice!==null ? 'Median Price: $' + product.relevant_product_market_prices.midPrice.toFixed(2) : 'None')}
-              </div>
-              <div className="product-foil-type">
-                Foil Type: {product.relevant_product_market_prices.subTypeName}
-              </div>
-            </div>
-            :
-            ''
-          }
-        </Paper>
-      </Grid>
-    ))
-}
 
 class SearchLayout extends React.Component {
   constructor(props){
@@ -70,6 +32,7 @@ class SearchLayout extends React.Component {
     this.state = {
       numProductsToShow: 12,
       search_term: '',
+      checkedBoxes: [],
     };
   }
 
@@ -80,7 +43,10 @@ class SearchLayout extends React.Component {
     let all_pokemon_products = await getPokemonProducts(pokemonCategoryId, this.state.search_term);
     let all_product_details = await getAllProductsById(all_pokemon_products);
 
-    this.setState({'products': all_product_details});
+    this.setState({
+      'products': all_product_details,
+      'const_products': all_product_details
+     });
   }
 
   showMoreProducts = () => {
@@ -103,7 +69,40 @@ class SearchLayout extends React.Component {
     let all_pokemon_products = await getPokemonProducts(pokemonCategoryId, this.state.search_term);
     let all_product_details = await getAllProductsById(all_pokemon_products);
 
-    this.setState({'products': all_product_details});
+    this.setState({
+      'products': all_product_details,
+      'const_products': all_product_details});
+  }
+
+  handleCheckboxPrinting = (e, printing) => {
+
+    const checkedBoxes = [...this.state.checkedBoxes];
+
+    const products = this.state.const_products;
+
+    if(e.target.checked){
+      checkedBoxes.push(printing);
+    } else {
+      const index = checkedBoxes.findIndex( (checked) => checked === printing);
+      checkedBoxes.splice(index, 1);
+    }
+
+    // check if a product contains a filter that is checked (checkedBoxes array)
+    // for printing types (holofoil, reverse holofoil, etc), check the subTypeName in relevant_product_market_prices object in a product object
+    let filtered_products = products;
+
+    if(checkedBoxes.length > 0){
+      filtered_products = products.filter(product =>
+                                  checkedBoxes.find((ch) =>
+                                    product['relevant_product_market_prices'] ?
+                                    product['relevant_product_market_prices'].subTypeName === ch :
+                                    false
+                                  )
+                                );
+    }
+
+
+    this.setState({checkedBoxes: checkedBoxes, products: filtered_products});
   }
 
   render() {
@@ -115,6 +114,8 @@ class SearchLayout extends React.Component {
               searchTerm={this.state.search_term}
               onChange={this.onChange}
               handleSearch={this.handleSearch}
+              handleCheckboxPrinting={this.handleCheckboxPrinting}
+              checkedBoxes={this.state.checkedBoxes}
             />
           </Grid>
           <Grid container spacing={3} xs={9} className="layout-container">
