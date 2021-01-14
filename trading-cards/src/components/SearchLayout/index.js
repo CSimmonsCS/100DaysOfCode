@@ -90,15 +90,75 @@ class SearchLayout extends React.Component {
     // check if a product contains a filter that is checked (checkedBoxes array)
     // for printing types (holofoil, reverse holofoil, etc), check the subTypeName in relevant_product_market_prices object in a product object
     let filtered_products = products;
+    const non_int_filters = checkedBoxes.filter(e => !Number.isInteger(e));
+    //holofoil, reverse holofoil, etc
+    const int_filters = checkedBoxes.filter(e => Number.isInteger(e));
+    //prices
+
+    console.log(non_int_filters);
+    console.log(int_filters);
 
     if(checkedBoxes.length > 0){
-      filtered_products = products.filter(product =>
-                                  checkedBoxes.find((ch) =>
-                                    product['relevant_product_market_prices'] ?
-                                    product['relevant_product_market_prices'].subTypeName === ch :
-                                    false
-                                  )
-                                );
+      // we check if either type of filters are checked,
+      // then check if either type of filter is checked while the other is not,
+      // if nothing checked, move on
+      if(non_int_filters.length > 0 && int_filters.length > 0){
+        //this line will return any product that contains matching filter (i.e. if holofoil is checked, return all holofoils)
+        filtered_products = products.filter(product =>
+                                    non_int_filters.find((ch) =>
+                                    //if 'relevant_product_market_prices' object is present,
+                                    // we see if matching printing filter is present
+                                      product['relevant_product_market_prices'] ?
+                                      product['relevant_product_market_prices'].subTypeName === ch :
+                                      false
+                                    ));
+
+        filtered_products = filtered_products.filter(product =>
+                                  int_filters.find((ch) =>
+                                   //check if checkedBox is a number
+                                  product['relevant_product_market_prices'] ?
+                                   //if yes, check if marketPrice is present
+                                  product['relevant_product_market_prices'].marketPrice !== null ?
+                                     // if marketPrice is present, finally check is marketPrice is less than checkedBox
+                                     product['relevant_product_market_prices'].marketPrice < ch :
+                                     // if no marketPrice, check if midPrice
+                                     product['relevant_product_market_prices'].midPrice !== null ?
+                                       // if midPrice is present, finally check if midprice is less than checkedBox
+                                       product['relevant_product_market_prices'].midPrice < ch :
+                                       false
+                                   :
+                                   false
+                                  ));
+      } else if (non_int_filters.length > 0 && int_filters.length === 0){
+        //this line will return any product that contains matching filter (i.e. if holofoil is checked, return all holofoils)
+        filtered_products = products.filter(product =>
+                                    non_int_filters.find((ch) =>
+                                    //if 'relevant_product_market_prices' object is present,
+                                    // we see if matching printing filter is present
+                                      product['relevant_product_market_prices'] ?
+                                      product['relevant_product_market_prices'].subTypeName === ch :
+                                      false
+                                    ));
+
+      } else if (non_int_filters.length === 0 && int_filters.length > 0){
+        // this line will return any product that is less than a price checked
+        filtered_products = filtered_products.filter(product =>
+                                  int_filters.find((ch) =>
+                                   //check if checkedBox is a number
+                                  product['relevant_product_market_prices'] ?
+                                   //if yes, check if marketPrice is present
+                                  product['relevant_product_market_prices'].marketPrice !== null ?
+                                     // if marketPrice is present, finally check is marketPrice is less than checkedBox
+                                     product['relevant_product_market_prices'].marketPrice < ch :
+                                     // if no marketPrice, check if midPrice
+                                     product['relevant_product_market_prices'].midPrice !== null ?
+                                       // if midPrice is present, finally check if midprice is less than checkedBox
+                                       product['relevant_product_market_prices'].midPrice < ch :
+                                       false
+                                   :
+                                   false
+                                  ));
+      }
     }
 
 
