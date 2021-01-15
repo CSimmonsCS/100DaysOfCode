@@ -1,6 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { getPokemonProducts } from "../../tcgplayer.js";
 import SearchChecklist from '../SearchChecklist';
 
 import TextField from '@material-ui/core/TextField';
