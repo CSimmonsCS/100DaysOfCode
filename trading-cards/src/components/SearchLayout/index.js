@@ -17,6 +17,7 @@ class SearchLayout extends React.Component {
       numProductsToShow: 12,
       search_term: '',
       checkedBoxes: [],
+      all_products_are_shown: false,
     };
   }
 
@@ -37,11 +38,22 @@ class SearchLayout extends React.Component {
 
   showMoreProducts = () => {
     let new_total_products_shown = this.state.numProductsToShow+12;
+    if(new_total_products_shown > this.state.products.length){
+      this.setState({'all_products_are_shown': true});
+    }
     this.setState({'numProductsToShow': new_total_products_shown});
   }
 
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value});
+  }
+
+  ifShownMoreThanLength = (numProductsToShow, products_length) => {
+    if(this.state.numProductsToShow > this.state.products.length){
+      this.setState({'all_products_are_shown': true});
+    } else{
+      this.setState({'all_products_are_shown': false});
+    }
   }
 
   handleSearch = async e => {
@@ -57,7 +69,11 @@ class SearchLayout extends React.Component {
 
     this.setState({
       'products': all_product_details,
-      'const_products': all_product_details});
+      'const_products': all_product_details,
+      'numProductsToShow' : 12,
+    });
+
+    this.ifShownMoreThanLength(this.state.numProductsToShow, this.state.products.length);
   }
 
   handleCheckboxPrinting = (e, printing) => {
@@ -87,7 +103,8 @@ class SearchLayout extends React.Component {
       filtered_products = filter_products_from_checkboxes(filtered_products, int_filters, non_int_filters);
     }
 
-    this.setState({checkedBoxes: checkedBoxes, products: filtered_products});
+    this.setState({checkedBoxes: checkedBoxes, products: filtered_products, numProductsToShow: 12});
+    this.ifShownMoreThanLength(this.state.numProductsToShow, this.state.products.length);
   }
 
   render() {
@@ -106,7 +123,7 @@ class SearchLayout extends React.Component {
           <Grid container spacing={3} xs={9} className="layout-container">
             <Products products={this.state.products} numProductsToShow={this.state.numProductsToShow}/>
 
-            {(this.state.products && this.state.products !== 'loading') ?
+            {(this.state.products && this.state.products !== 'loading' && !this.state.all_products_are_shown) ?
               <div className="show-more-button-container" onClick={this.showMoreProducts} >
                 <div className="show-more-button">
                   Show More
