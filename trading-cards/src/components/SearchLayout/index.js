@@ -10,22 +10,6 @@ import Search from '../Search';
 import Products from '../Products';
 
 
-
-// const PUBLIC_KEY = 'e461db10-9b1d-48f4-b689-e6bd4e1be9dd';
-// const PRIVATE_KEY = 'edfa43ea-dff7-4788-8a2b-285afa3e172f';
-//
-// const headers = {
-//   'User-Agent': 'CardValue',
-//
-// };
-//
-// const dataString =
-//   'grant_type=client_credentials' +
-//   '&client_id=' + PUBLIC_KEY +
-//   '&client_secret=' + PRIVATE_KEY;
-
-
-
 class SearchLayout extends React.Component {
   constructor(props){
     super(props);
@@ -37,6 +21,8 @@ class SearchLayout extends React.Component {
   }
 
   async componentDidMount(){
+    this.setState({'products': 'loading' });
+
     await getBearerToken();
     const categories = await getAllCategories();
     let pokemonCategoryId = await getPokemonCategoryId(categories);
@@ -61,7 +47,7 @@ class SearchLayout extends React.Component {
   handleSearch = async e => {
     e.preventDefault();
 
-    this.setState({'products': null });
+    this.setState({'products': 'loading' });
 
     await getBearerToken();
     const categories = await getAllCategories();
@@ -77,7 +63,6 @@ class SearchLayout extends React.Component {
   handleCheckboxPrinting = (e, printing) => {
 
     const checkedBoxes = [...this.state.checkedBoxes];
-
     const products = this.state.const_products;
 
     if(e.target.checked){
@@ -90,77 +75,17 @@ class SearchLayout extends React.Component {
     // check if a product contains a filter that is checked (checkedBoxes array)
     // for printing types (holofoil, reverse holofoil, etc), check the subTypeName in relevant_product_market_prices object in a product object
     let filtered_products = products;
-    const non_int_filters = checkedBoxes.filter(e => !Number.isInteger(e));
     //holofoil, reverse holofoil, etc
-    const int_filters = checkedBoxes.filter(e => Number.isInteger(e));
+    const non_int_filters = checkedBoxes.filter(e => !Number.isInteger(e));
     //prices
+    const int_filters = checkedBoxes.filter(e => Number.isInteger(e));
 
     console.log(non_int_filters);
     console.log(int_filters);
 
     if(checkedBoxes.length > 0){
-      // we check if either type of filters are checked,
-      // then check if either type of filter is checked while the other is not,
-      // if nothing checked, move on
-      if(non_int_filters.length > 0 && int_filters.length > 0){
-        //this line will return any product that contains matching filter (i.e. if holofoil is checked, return all holofoils)
-        filtered_products = products.filter(product =>
-                                    non_int_filters.find((ch) =>
-                                    //if 'relevant_product_market_prices' object is present,
-                                    // we see if matching printing filter is present
-                                      product['relevant_product_market_prices'] ?
-                                      product['relevant_product_market_prices'].subTypeName === ch :
-                                      false
-                                    ));
-
-        filtered_products = filtered_products.filter(product =>
-                                  int_filters.find((ch) =>
-                                   //check if checkedBox is a number
-                                  product['relevant_product_market_prices'] ?
-                                   //if yes, check if marketPrice is present
-                                  product['relevant_product_market_prices'].marketPrice !== null ?
-                                     // if marketPrice is present, finally check is marketPrice is less than checkedBox
-                                     product['relevant_product_market_prices'].marketPrice < ch :
-                                     // if no marketPrice, check if midPrice
-                                     product['relevant_product_market_prices'].midPrice !== null ?
-                                       // if midPrice is present, finally check if midprice is less than checkedBox
-                                       product['relevant_product_market_prices'].midPrice < ch :
-                                       false
-                                   :
-                                   false
-                                  ));
-      } else if (non_int_filters.length > 0 && int_filters.length === 0){
-        //this line will return any product that contains matching filter (i.e. if holofoil is checked, return all holofoils)
-        filtered_products = products.filter(product =>
-                                    non_int_filters.find((ch) =>
-                                    //if 'relevant_product_market_prices' object is present,
-                                    // we see if matching printing filter is present
-                                      product['relevant_product_market_prices'] ?
-                                      product['relevant_product_market_prices'].subTypeName === ch :
-                                      false
-                                    ));
-
-      } else if (non_int_filters.length === 0 && int_filters.length > 0){
-        // this line will return any product that is less than a price checked
-        filtered_products = filtered_products.filter(product =>
-                                  int_filters.find((ch) =>
-                                   //check if checkedBox is a number
-                                  product['relevant_product_market_prices'] ?
-                                   //if yes, check if marketPrice is present
-                                  product['relevant_product_market_prices'].marketPrice !== null ?
-                                     // if marketPrice is present, finally check is marketPrice is less than checkedBox
-                                     product['relevant_product_market_prices'].marketPrice < ch :
-                                     // if no marketPrice, check if midPrice
-                                     product['relevant_product_market_prices'].midPrice !== null ?
-                                       // if midPrice is present, finally check if midprice is less than checkedBox
-                                       product['relevant_product_market_prices'].midPrice < ch :
-                                       false
-                                   :
-                                   false
-                                  ));
-      }
+      filtered_products = filter_products_from_checkboxes(filtered_products, int_filters, non_int_filters);
     }
-
 
     this.setState({checkedBoxes: checkedBoxes, products: filtered_products});
   }
@@ -181,7 +106,7 @@ class SearchLayout extends React.Component {
           <Grid container spacing={3} xs={9} className="layout-container">
             <Products products={this.state.products} numProductsToShow={this.state.numProductsToShow}/>
 
-            {this.state.products ?
+            {(this.state.products && this.state.products !== 'loading') ?
               <div className="show-more-button-container" onClick={this.showMoreProducts} >
                 <div className="show-more-button">
                   Show More
@@ -196,7 +121,57 @@ class SearchLayout extends React.Component {
       </div>
     );
   }
+}
 
+ const filter_products_from_checkboxes = (filtered_products, int_filters, non_int_filters) => {
+  // we check if either type of filters are checked,
+  // then check if either type of filter is checked while the other is not,
+  // if nothing checked, move on
+  if(non_int_filters.length > 0 && int_filters.length > 0){
+    //this line will return any product that contains matching filter (i.e. if holofoil is checked, return all holofoils)
+    filtered_products = filter_from_non_int_filters(filtered_products, non_int_filters);
+    filtered_products = filter_from_int_filters(filtered_products, int_filters);
+
+  } else if (non_int_filters.length > 0 && int_filters.length === 0){
+    //this line will return any product that contains matching filter (i.e. if holofoil is checked, return all holofoils)
+    filtered_products = filter_from_non_int_filters(filtered_products, non_int_filters);
+
+  } else if (non_int_filters.length === 0 && int_filters.length > 0){
+    // this line will return any product that is less than a price checked
+    filtered_products = filter_from_int_filters(filtered_products, int_filters);
+  }
+
+  return filtered_products;
+}
+
+const filter_from_int_filters = (filtered_products, int_filters) => {
+  return filtered_products.filter(product =>
+                            int_filters.find((ch) =>
+                             //check if checkedBox is a number
+                            product['relevant_product_market_prices'] ?
+                             //if yes, check if marketPrice is present
+                            product['relevant_product_market_prices'].marketPrice !== null ?
+                               // if marketPrice is present, finally check is marketPrice is less than checkedBox
+                               product['relevant_product_market_prices'].marketPrice < ch :
+                               // if no marketPrice, check if midPrice
+                               product['relevant_product_market_prices'].midPrice !== null ?
+                                 // if midPrice is present, finally check if midprice is less than checkedBox
+                                 product['relevant_product_market_prices'].midPrice < ch :
+                                 false
+                             :
+                             false
+                            ));
+}
+
+const filter_from_non_int_filters = (filtered_products, non_int_filters) => {
+  return filtered_products.filter(product =>
+                              non_int_filters.find((ch) =>
+                              //if 'relevant_product_market_prices' object is present,
+                              // we see if matching printing filter is present
+                                product['relevant_product_market_prices'] ?
+                                product['relevant_product_market_prices'].subTypeName === ch :
+                                false
+                              ));
 }
 
 export default SearchLayout;

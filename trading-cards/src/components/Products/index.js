@@ -7,11 +7,18 @@ import Paper from '@material-ui/core/Paper';
 import { BlockReserveLoading } from 'react-loadingg';
 
 const Products = props => {
-  if(!props.products || props.products.length === 0){
+  if(props.products === 'loading'){
     //loading graphic in 'CardValue' purple
     return (
       <div className="loading-graphic">
         <BlockReserveLoading color={'#332940'} />
+      </div>
+    )
+  }
+  if(!props.products || props.products.length === 0){
+    return (
+      <div className="loading-graphic">
+        No Products
       </div>
     )
   }
