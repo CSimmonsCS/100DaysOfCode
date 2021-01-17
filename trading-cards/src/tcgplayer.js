@@ -166,10 +166,16 @@ export let getAllProductsById = async (arrayOfProductIds) => {
        b['relevant_product_market_prices'].marketPrice && a['relevant_product_market_prices'].marketPrice ?
          b['relevant_product_market_prices'].marketPrice - a['relevant_product_market_prices'].marketPrice
          :
-         b['relevant_product_market_prices'].midPrice && a['relevant_product_market_prices'].midPrice ?
-          b['relevant_product_market_prices'].midPrice - a['relevant_product_market_prices'].midPrice
+         b['relevant_product_market_prices'].midPrice && a['relevant_product_market_prices'].marketPrice ?
+          b['relevant_product_market_prices'].midPrice - a['relevant_product_market_prices'].marketPrice
           :
-          0
+          b['relevant_product_market_prices'].marketPrice && a['relevant_product_market_prices'].midPrice ?
+           b['relevant_product_market_prices'].marketPrice - a['relevant_product_market_prices'].midPrice
+           :
+           b['relevant_product_market_prices'].midPrice && a['relevant_product_market_prices'].midPrice ?
+            b['relevant_product_market_prices'].midPrice - a['relevant_product_market_prices'].midPrice
+            :
+            0
     :
     0
   });
