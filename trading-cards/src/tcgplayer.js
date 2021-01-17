@@ -114,7 +114,7 @@ export let getPokemonProducts = async (pokemonId, search_term) => {
     //   offset: 0,
     //   filters: [{name: 'ProductName', values: ['Pokemon',]}],
     // },
-    data: "{\"filters\":[{\"values\":[\"" + search_term + "\"],\"name\":\"ProductName\"}],\"limit\":72,\"includeAggregates\":true,\"offset\":0,\"sort\":\"MinPrice DESC\"}",
+    data: "{\"filters\":[{\"values\":[\"" + search_term + "\"],\"name\":\"ProductName\"}],\"limit\":144,\"includeAggregates\":true,\"offset\":0,\"sort\":\"MinPrice DESC\"}",
   }).catch((error) => {
     console.log(error.response);
   });
@@ -127,13 +127,53 @@ export let getPokemonProducts = async (pokemonId, search_term) => {
   return all_pokemon_products.results;
 }
 
+
+export let getTwelveMoreProductsById = async (arrayOfProductIds, offset) => {
+  let twelve_more_product_details = [];
+
+  console.log('calling to api to get Product Details (12)');
+  for(var i = offset; i < offset + 12; i++){
+    twelve_more_product_details.push(await getOneProductById(arrayOfProductIds[i]));
+  }
+  // arrayOfProductIds.forEach( x => all_product_details.push(getOneProductById(x)));
+  console.log(twelve_more_product_details);
+
+  return twelve_more_product_details;
+
+}
+
+
 export let getAllProductsById = async (arrayOfProductIds) => {
   let all_product_details = [];
 
-  console.log('calling to api to get Product Details (72)');
-  for(var i = 0; i < arrayOfProductIds.length; i++){
-    all_product_details.push(await getOneProductById(arrayOfProductIds[i]));
-  }
+  console.log('calling to api to get Product Details (144)');
+  // for(var i = 0; i < arrayOfProductIds.length; i++){
+  //   all_product_details.push(await getOneProductById(arrayOfProductIds[i]));
+  // }
+
+  await Promise.all(
+    arrayOfProductIds.map(async (id) => {
+      all_product_details.push(await getOneProductById(id));
+    })
+  )
+
+  //factor out later
+  //we check if there is a relevant_product_market_prices object
+  // if so, is there marketPrice property
+  // if not, is there a midPrice property
+  all_product_details.sort((a,b) => {
+    return b['relevant_product_market_prices'] && a['relevant_product_market_prices'] ?
+       b['relevant_product_market_prices'].marketPrice && a['relevant_product_market_prices'].marketPrice ?
+         b['relevant_product_market_prices'].marketPrice - a['relevant_product_market_prices'].marketPrice
+         :
+         b['relevant_product_market_prices'].midPrice && a['relevant_product_market_prices'].midPrice ?
+          b['relevant_product_market_prices'].midPrice - a['relevant_product_market_prices'].midPrice
+          :
+          0
+    :
+    0
+  });
+
   // arrayOfProductIds.forEach( x => all_product_details.push(getOneProductById(x)));
   console.log(all_product_details);
 
