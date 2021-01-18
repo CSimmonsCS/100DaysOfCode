@@ -103,7 +103,9 @@ class SearchLayout extends React.Component {
       filtered_products = filter_products_from_checkboxes(filtered_products, int_filters, non_int_filters);
     }
 
-    this.setState({checkedBoxes: checkedBoxes, products: filtered_products, numProductsToShow: 12});
+    let numProductsToShow = filtered_products.length < 12 ? filtered_products.length : 12;
+
+    this.setState({checkedBoxes: checkedBoxes, products: filtered_products, numProductsToShow: numProductsToShow});
     this.ifShownMoreThanLength(this.state.numProductsToShow, this.state.products.length);
   }
 

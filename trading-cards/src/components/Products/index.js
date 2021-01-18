@@ -37,8 +37,15 @@ const Products = props => {
           {product.relevant_product_market_prices ?
             <div>
               <div className="product-price">
-                {product.relevant_product_market_prices.marketPrice!==null ? 'Market Price: $' + product.relevant_product_market_prices.marketPrice.toFixed(2) :
-                  (product.relevant_product_market_prices.midPrice!==null ? 'Median Price: $' + product.relevant_product_market_prices.midPrice.toFixed(2) : 'None')}
+                {
+                  product.relevant_product_market_prices.marketPrice!==null && product.relevant_product_market_prices.marketPrice !== 0 ?
+                  'Market Price: $' + product.relevant_product_market_prices.marketPrice.toFixed(2)
+                  :
+                  (product.relevant_product_market_prices.midPrice!==null && product.relevant_product_market_prices.midPrice !== 0 ?
+                    'Median Price: $' + product.relevant_product_market_prices.midPrice.toFixed(2)
+                    :
+                    'None')
+                }
               </div>
               <div className="product-foil-type">
                 Foil Type: {product.relevant_product_market_prices.subTypeName}
