@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Card from './Card.png';
+import { Link } from "react-router-dom";
 
 
 function Header() {
@@ -15,10 +16,10 @@ function Header() {
           </div>
           <ul>
             <li>
-              <a href="#">Pokemon</a>
+              <Link to="/">Pokemon</Link>
             </li>
             <li>
-              <a href="#">YuGiOh</a>
+              <Link to="/yugioh">YuGiOh</Link>
             </li>
             <li>
               <a href="#">Sign In</a>

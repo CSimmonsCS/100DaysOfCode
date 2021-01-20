@@ -77,6 +77,17 @@ export let getPokemonCategoryId = (all_categories) => {
   return pokemonCategoryId;
 }
 
+export let getYugiohCategoryId = (all_categories) => {
+  console.log('getting YuGiOh categoryId');
+  let yugioh_category_object = all_categories.results.find( x => x.name === 'YuGiOh');
+  console.log(yugioh_category_object);
+  let yugiohCategoryId = yugioh_category_object['categoryId'];
+  console.log(yugiohCategoryId);
+  console.log('yugioh categoryId success');
+
+  return yugiohCategoryId;
+}
+
 //unused, function gets media files like jpeg, etc
 //unwanted for scope of project
 export let getPokemonMedia = async (pokemonId) => {
@@ -97,10 +108,10 @@ export let getPokemonMedia = async (pokemonId) => {
   return all_pokemon_media;
 }
 
-export let getPokemonProducts = async (pokemonId, search_term) => {
+export let getCategoryProducts = async (categoryId, search_term) => {
   console.log('calling to api to get pokemon products');
   const response = await axios({
-    url: 'https://api.tcgplayer.com/catalog/categories/' + pokemonId + '/search',
+    url: 'https://api.tcgplayer.com/catalog/categories/' + categoryId + '/search',
     method: 'POST',
     headers:
     {
@@ -119,12 +130,12 @@ export let getPokemonProducts = async (pokemonId, search_term) => {
     console.log(error.response);
   });
   console.log(response);
-  const all_pokemon_products = response.data;
+  const all_category_products = response.data;
 
-  console.log(all_pokemon_products);
+  console.log(all_category_products);
   console.log('all pokemon products success');
 
-  return all_pokemon_products.results;
+  return all_category_products.results;
 }
 
 
@@ -247,7 +258,7 @@ const AllCalls = async () => {
   await getBearerToken();
   const categories = await getAllCategories();
   let pokemonCategoryId = await getPokemonCategoryId(categories);
-  let all_pokemon_products = await getPokemonProducts(pokemonCategoryId);
+  let all_pokemon_products = await getCategoryProducts(pokemonCategoryId);
   let all_product_details = await getAllProductsById(all_pokemon_products);
 
   return all_product_details;

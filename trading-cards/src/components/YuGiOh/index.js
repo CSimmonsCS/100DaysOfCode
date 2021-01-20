@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { getBearerToken, getAllCategories,
-        getPokemonCategoryId, getCategoryProducts,
+        getYugiohCategoryId, getCategoryProducts,
         getAllProductsById, } from "../../tcgplayer.js";
 
 import Search from '../Search';
 import Products from '../Products';
 
 
-class SearchLayout extends React.Component {
+class YuGiOh extends React.Component {
   constructor(props){
     super(props);
     this.state = {
@@ -26,9 +26,9 @@ class SearchLayout extends React.Component {
 
     await getBearerToken();
     const categories = await getAllCategories();
-    let pokemonCategoryId = await getPokemonCategoryId(categories);
-    let all_pokemon_products = await getCategoryProducts(pokemonCategoryId, this.state.search_term);
-    let all_product_details = await getAllProductsById(all_pokemon_products);
+    let yugiohCategoryId = await getYugiohCategoryId(categories);
+    let all_yugioh_products = await getCategoryProducts(yugiohCategoryId, this.state.search_term);
+    let all_product_details = await getAllProductsById(all_yugioh_products);
 
     this.setState({
       'products': all_product_details,
@@ -63,9 +63,9 @@ class SearchLayout extends React.Component {
 
     await getBearerToken();
     const categories = await getAllCategories();
-    let pokemonCategoryId = await getPokemonCategoryId(categories);
-    let all_pokemon_products = await getCategoryProducts(pokemonCategoryId, this.state.search_term);
-    let all_product_details = await getAllProductsById(all_pokemon_products);
+    let yugiohCategoryId = await getYugiohCategoryId(categories);
+    let all_yugioh_products = await getCategoryProducts(yugiohCategoryId, this.state.search_term);
+    let all_product_details = await getAllProductsById(all_yugioh_products);
 
     this.setState({
       'products': all_product_details,
@@ -193,4 +193,4 @@ const filter_from_non_int_filters = (filtered_products, non_int_filters) => {
                               ));
 }
 
-export default SearchLayout;
+export default YuGiOh;
