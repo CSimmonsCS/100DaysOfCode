@@ -18,6 +18,7 @@ class YuGiOh extends React.Component {
       search_term: '',
       checkedBoxes: [],
       all_products_are_shown: false,
+      category: 'yugioh',
     };
   }
 
@@ -120,6 +121,7 @@ class YuGiOh extends React.Component {
               handleSearch={this.handleSearch}
               handleCheckboxPrinting={this.handleCheckboxPrinting}
               checkedBoxes={this.state.checkedBoxes}
+              category={this.state.category}
             />
           </Grid>
           <Grid container spacing={3} xs={9} className="layout-container">

@@ -2,10 +2,21 @@ import React from 'react';
 
 const SearchChecklist = props => {
 
-  const printings = ['Holofoil',
-                     '1st Edition Holofoil',
-                     'Reverse Holofoil',
-                     'Normal'];
+  let printings = [];
+
+  if(props.category === 'pokemon'){
+    printings = ['Normal',
+                 'Holofoil',
+                 '1st Edition Holofoil',
+                 'Reverse Holofoil',
+                 ];
+  } else if (props.category === 'yugioh'){
+    printings = ['Normal',
+                 'Limited',
+                 'Unlimited',
+                 '1st Edition'];
+  }
+
 
   const prices = [5, 10, 25, 50, 100, 200, 500, 750];
 
