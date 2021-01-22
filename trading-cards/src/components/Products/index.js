@@ -17,8 +17,8 @@ const Products = props => {
   }
   if(!props.products || props.products.length === 0){
     return (
-      <div className="loading-graphic">
-        No Products
+      <div className="no-products">
+        No Products Found
       </div>
     )
   }
